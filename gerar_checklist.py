@@ -8,6 +8,11 @@ from openpyxl import Workbook
 from openpyxl.styles import Font, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 
+# Constantes
+TOTAL_DIAS = 31
+TURNOS_POR_DIA = 3
+TOTAL_COLUMNS = 2 + (TOTAL_DIAS * TURNOS_POR_DIA)  # 1 coluna MATERIAL + 1 offset + 93 colunas de dias
+
 def criar_checklist():
     # Criar novo workbook
     wb = Workbook()
@@ -66,9 +71,9 @@ def criar_checklist():
     material_cell.alignment = Alignment(horizontal='center', vertical='center')
     material_cell.border = thin_border
     
-    # Cabeçalho dos dias (1 a 31)
+    # Cabeçalho dos dias (1 a TOTAL_DIAS)
     col_index = 2  # Coluna B
-    for dia in range(1, 32):
+    for dia in range(1, TOTAL_DIAS + 1):
         # Mesclar 3 colunas para o número do dia
         start_col = get_column_letter(col_index)
         end_col = get_column_letter(col_index + 2)
@@ -100,7 +105,7 @@ def criar_checklist():
         ws[f'A{linha_atual}'].border = thin_border
         
         # Adicionar células vazias para cada dia (M, T, N)
-        for col in range(2, 95):  # 2 a 94 (31 dias * 3 turnos = 93 colunas + 1 para MATERIAL)
+        for col in range(2, TOTAL_COLUMNS):
             cell = ws.cell(row=linha_atual, column=col)
             cell.border = thin_border
             cell.alignment = Alignment(horizontal='center', vertical='center')
@@ -114,7 +119,7 @@ def criar_checklist():
     ws[f'A{linha_atual}'].border = thin_border
     
     # Adicionar células vazias para a linha de visto
-    for col in range(2, 95):
+    for col in range(2, TOTAL_COLUMNS):
         cell = ws.cell(row=linha_atual, column=col)
         cell.border = thin_border
         cell.alignment = Alignment(horizontal='center', vertical='center')
@@ -123,7 +128,7 @@ def criar_checklist():
     ws.column_dimensions['A'].width = 30  # Coluna MATERIAL mais larga
     
     # Colunas dos dias (M, T, N) mais estreitas
-    for col in range(2, 95):
+    for col in range(2, TOTAL_COLUMNS):
         ws.column_dimensions[get_column_letter(col)].width = 3
     
     # Ajustar altura das linhas

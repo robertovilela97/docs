@@ -4,6 +4,7 @@ Script para verificar a estrutura da planilha Excel gerada
 """
 
 from openpyxl import load_workbook
+from openpyxl.utils import get_column_letter
 
 def verificar_checklist():
     wb = load_workbook('CHECK_LIST_EQUIPAMENTOS_SALA_01.xlsx')
@@ -61,7 +62,6 @@ def verificar_checklist():
     col_index = 2
     dias_encontrados = []
     for dia in range(1, 32):
-        from openpyxl.utils import get_column_letter
         col_letter = get_column_letter(col_index)
         valor_dia = ws[f'{col_letter}3'].value
         if valor_dia == dia:
@@ -74,7 +74,6 @@ def verificar_checklist():
     col_index = 2
     turnos_ok = 0
     for dia in range(1, 32):
-        from openpyxl.utils import get_column_letter
         m_col = get_column_letter(col_index)
         t_col = get_column_letter(col_index + 1)
         n_col = get_column_letter(col_index + 2)
